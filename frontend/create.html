@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Create Short URL</title>
+    <style>
+        /* 全局样式 */
+        body {
+            font-family: 'Arial', sans-serif;
+            margin: 0;
+            padding: 0;
+            background: linear-gradient(135deg, #6a11cb, #2575fc);
+            color: white;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+
+        .container {
+            text-align: center;
+            background: rgba(255, 255, 255, 0.1);
+            padding: 40px;
+            border-radius: 15px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+            backdrop-filter: blur(10px);
+            max-width: 400px;
+            width: 100%;
+        }
+
+        h1 {
+            font-size: 2rem;
+            margin-bottom: 20px;
+            animation: fadeIn 1s ease-in-out;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+            text-align: left;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: bold;
+        }
+
+        input[type="text"] {
+            width: 100%;
+            padding: 12px;
+            border: none;
+            border-radius: 8px;
+            background: rgba(255, 255, 255, 0.2);
+            color: white;
+            font-size: 1rem;
+            transition: background 0.3s ease;
+        }
+
+        input[type="text"]::placeholder {
+            color: rgba(255, 255, 255, 0.7);
+        }
+
+        input[type="text"]:focus {
+            background: rgba(255, 255, 255, 0.3);
+            outline: none;
+        }
+
+        button {
+            width: 100%;
+            background: rgba(255, 255, 255, 0.2);
+            border: none;
+            padding: 15px;
+            border-radius: 8px;
+            color: white;
+            font-size: 1.1rem;
+            cursor: pointer;
+            transition: background 0.3s ease, transform 0.2s ease;
+        }
+
+        button:hover {
+            background: rgba(255, 255, 255, 0.3);
+            transform: translateY(-3px);
+        }
+
+        button:active {
+            transform: translateY(0);
+        }
+
+        .result {
+            margin-top: 20px;
+            padding: 15px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 8px;
+            text-align: left;
+            display: none;
+        }
+
+        .result a {
+            color: #6a11cb;
+            text-decoration: none;
+            font-weight: bold;
+        }
+
+        .result a:hover {
+            text-decoration: underline;
+        }
+
+        .back-btn {
+            display: block;
+            margin-top: 20px;
+            color: white;
+            text-decoration: none;
+            text-align: center;
+        }
+
+        .back-btn:hover {
+            text-decoration: underline;
+        }
+
+        /* 动画 */
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <h1>Create Short URL</h1>
+    <div class="form-group">
+        <label for="original_url">Original URL:</label>
+        <input type="text" id="original_url" placeholder="https://example.com">
+    </div>
+    <div class="form-group">
+        <label for="custom_code">Custom Code (optional):</label>
+        <input type="text" id="custom_code" placeholder="e.g., mylink">
+    </div>
+    <button onclick="createShortUrl()">Create Short URL</button>
+    <div id="result" class="result">
+        <p><strong>Short URL:</strong> <a id="short_url" target="_blank"></a></p>
+        <p><strong>Original URL:</strong> <span id="original_url_result"></span></p>
+    </div>
+    <a href="index.html" class="back-btn">Back to Home</a>
+</div>
+
+<script>
+    async function createShortLink(original_url, custom_code = null, duration = null) {
+        const url = 'http://8.136.122.238/api/url'; // 替换为实际的 API 端点
+        const requestBody = {
+            original_url: original_url,
+            custom_code: custom_code,
+            duration: duration
+        };
+
+        try {
+            const response = await fetch(url, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(requestBody)
+            });
+
+            if (!response.ok) {
+                throw new Error(`HTTP error! status: ${response.status}`);
+            }
+
+            const data = await response.json();
+            return data;
+        } catch (error) {
+            console.error('Error creating short link:', error);
+            throw error;
+        }
+    }
+
+    function createShortUrl() {
+        const originalUrl = document.getElementById('original_url').value;
+        var customCode = document.getElementById('custom_code').value||null;
+        // const resultDiv = document.getElementById('result');
+        // const shortUrlLink = document.getElementById('short_url');
+        // const originalUrlResult = document.getElementById('original_url_result');
+
+        // 清空之前的结果
+        resultDiv.style.display = 'none';
+
+        // 检查输入是否为空
+        if (!originalUrl) {
+            alert('Please enter a URL.');
+            return;
+        }
+        createShortLink(originalUrl, customCode)
+            .then(data => {
+                customCode=data.short_url
+                console.log('Short URL:', data.short_url);
+                console.log('Original URL:', data.original_url);
+                console.log('Expire Time:', data.expire_time);
+            })
+            .catch(error => {
+                console.error('Failed to create short link:', error);
+            });
+
+        // 模拟调用后端API创建短链接
+        const shortUrl = `http://8.136.122.238/${customCode}`;
+
+        // 显示结果
+        shortUrlLink.href = shortUrl;
+        shortUrlLink.textContent = shortUrl;
+        originalUrlResult.textContent = originalUrl;
+        resultDiv.style.display = 'block';
+    }
+</script>
+</body>
+</html>
