@@ -152,7 +152,10 @@
 
 <script>
     async function createShortLink(original_url, custom_code = null, duration = null) {
-        const url = 'http://8.136.122.238/api/url'; // 替换为实际的 API 端点
+
+        const host = process.env.HOST_NAME ; // 默认主机名
+        const apiPath = '/api/url'; // API 路径
+        const url = `${host}${apiPath}`; // 动态拼接完整 URL
         const requestBody = {
             original_url: original_url,
             custom_code: custom_code,
@@ -183,9 +186,9 @@
     function createShortUrl() {
         const originalUrl = document.getElementById('original_url').value;
         var customCode = document.getElementById('custom_code').value||null;
-        // const resultDiv = document.getElementById('result');
-        // const shortUrlLink = document.getElementById('short_url');
-        // const originalUrlResult = document.getElementById('original_url_result');
+        const resultDiv = document.getElementById('result');
+        const shortUrlLink = document.getElementById('short_url');
+        const originalUrlResult = document.getElementById('original_url_result');
 
         // 清空之前的结果
         resultDiv.style.display = 'none';
