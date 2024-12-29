@@ -200,7 +200,11 @@
         }
         createShortLink(originalUrl, customCode)
             .then(data => {
-                 shortUrl=`http://${data.short_url}`;
+                shortUrl=`http://${data.short_url}`;
+                shortUrlLink.href = shortUrl;
+                shortUrlLink.textContent = shortUrl;
+                originalUrlResult.textContent = originalUrl;
+                resultDiv.style.display = 'block';
                 console.log('Short URL:', data.short_url);
                 console.log('Original URL:', data.original_url);
                 console.log('Expire Time:', data.expire_time);
@@ -208,11 +212,6 @@
             .catch(error => {
                 console.error('Failed to create short link:', error);
             });
-        // 显示结果
-        shortUrlLink.href = shortUrl;
-        shortUrlLink.textContent = shortUrl;
-        originalUrlResult.textContent = originalUrl;
-        resultDiv.style.display = 'block';
     }
 </script>
 </body>
