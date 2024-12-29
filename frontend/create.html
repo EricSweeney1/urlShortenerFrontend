@@ -189,7 +189,7 @@
         const resultDiv = document.getElementById('result');
         const shortUrlLink = document.getElementById('short_url');
         const originalUrlResult = document.getElementById('original_url_result');
-        var custom_code
+        var shortUrl
         // 清空之前的结果
         resultDiv.style.display = 'none';
 
@@ -200,7 +200,7 @@
         }
         createShortLink(originalUrl, customCode)
             .then(data => {
-                custom_code=data.short_url
+                 shortUrl=`http://${data.short_url}`;
                 console.log('Short URL:', data.short_url);
                 console.log('Original URL:', data.original_url);
                 console.log('Expire Time:', data.expire_time);
@@ -208,7 +208,6 @@
             .catch(error => {
                 console.error('Failed to create short link:', error);
             });
-        var shortUrl=`http://${custom_code}`
         // 显示结果
         shortUrlLink.href = shortUrl;
         shortUrlLink.textContent = shortUrl;
