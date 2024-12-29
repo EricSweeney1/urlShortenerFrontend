@@ -152,10 +152,7 @@
 
 <script>
     async function createShortLink(original_url, custom_code = null, duration = null) {
-
-        // const host = "8.136.122.238"; // 默认主机名
-        // const apiPath = ; // API 路径
-        const url = '/api/url'; // 动态拼接完整 URL
+        const url = '/api/url';
         const requestBody = {
             original_url: original_url,
             custom_code: custom_code,

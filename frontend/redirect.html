@@ -136,24 +136,33 @@
         const urlInput = document.getElementById('urlInput').value;
         const errorMessage = document.getElementById('errorMessage');
 
+        const alphanumericPattern = /^[a-zA-Z0-9]{4,10}$/;
         // 清空之前的错误信息
         errorMessage.style.display = 'none';
 
         // 检查输入是否为空
         if (!urlInput) {
-            errorMessage.textContent = 'Please enter a URL.';
+            errorMessage.textContent = 'Please enter a URL or short code.';
             errorMessage.style.display = 'block';
             return;
         }
 
         // 检查URL格式是否有效
-        try {
-            const url = new URL(urlInput);
-            window.location.href = url.href; // 跳转到输入的URL
-        } catch (e) {
-            errorMessage.textContent = 'Invalid URL. Please enter a valid URL (e.g., https://example.com).';
-            errorMessage.style.display = 'block';
+        if (alphanumericPattern.test(urlInput)) {
+            // 如果是4到10位字母或数字，拼接主机名并跳转
+            const hostname = "http://8.136.122.238"; // 替换为你的主机名
+            window.location.href = `${hostname}/${urlInput}`;
+        }else{
+            try {
+                const url = new URL(urlInput);
+                window.location.href = url.href; // 跳转到输入的URL
+            } catch (e) {
+                errorMessage.textContent = 'Invalid URL. Please enter a valid URL (e.g., https://example.com) or short code';
+                errorMessage.style.display = 'block';
+            }
         }
+
+
     }
 </script>
 </body>
