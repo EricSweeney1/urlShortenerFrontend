@@ -154,8 +154,8 @@
     async function createShortLink(original_url, custom_code = null, duration = null) {
 
         // const host = "8.136.122.238"; // 默认主机名
-        const apiPath = '/api/url'; // API 路径
-        const url = `${apiPath}`; // 动态拼接完整 URL
+        // const apiPath = ; // API 路径
+        const url = '/api/url'; // 动态拼接完整 URL
         const requestBody = {
             original_url: original_url,
             custom_code: custom_code,
@@ -175,8 +175,7 @@
                 throw new Error(`HTTP error! status: ${response.status}`);
             }
 
-            const data = await response.json();
-            return data;
+            return await response.json();
         } catch (error) {
             console.error('Error creating short link:', error);
             throw error;
