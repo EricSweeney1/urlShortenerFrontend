@@ -150,7 +150,7 @@
         // 检查URL格式是否有效
         if (alphanumericPattern.test(urlInput)) {
             // 如果是4到10位字母或数字，拼接主机名并跳转
-            const hostname = "http://8.136.122.238"; // 替换为你的主机名
+            const hostname = window.location.protocol + "//" + window.location.hostname; // 替换为你的主机名
             window.location.href = `${hostname}/${urlInput}`;
         }else{
             try {
